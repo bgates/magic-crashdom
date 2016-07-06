@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>The Fetch API and Promises</title>
+    <style>
+      html {
+        height: 100%;
+      }
+      body {
+        background: #cc1010;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      }
+      section {
+        background: #fff;
+        width: 80%;
+        margin: 0 auto;
+        padding: 20px;
+        flex: 1;
+        border-radius: 5px;
+      }
+      h1, h2 {
+        font-family: Georgia;
+      }
+      p {
+        line-height: 1.4;
+        font-family: Verdana;
+      }
+      pre {
+        white-space: pre-wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <section>
+      <h1>Movie Title</h1>
+      <h2>Released 06 Jul 2016</h2>
+      <p>Plot summary</p>
+      <pre></pre>
+    </section>
+    <script type="text/javascript" charset="utf-8">
+      var url = "http://www.omdbapi.com/?t=brotherhood+of+the+wolf&y=&plot=full&r=json";
+      function convertToJson(response) {
+        return response.json();
+      }
+      function updatePage(data){
+        document.querySelector("h1").innerText = data["Title"];
+        document.querySelector("h2").innerText = data["Released"];
+        document.querySelector("p").innerText = data["Plot"];
+        //document.querySelector("pre").innerText = JSON.stringify(data);
+      }
+      fetch(url).then(convertToJson).then(updatePage);
+    </script>
+  </body>
+</html>

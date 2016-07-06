@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Fetching Disney Data</title>
+    <style>
+      @font-face {
+        font-family: "Waltograph";
+        src: url("./fonts/waltograph/WaltographUIBold/waltographUI.ttf");
+      }
+      html {
+        height: 100%;
+      }
+      body {
+        background: #dad3e5;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      }
+      section {
+        background: #fff;
+        width: 80%;
+        margin: 0 auto;
+        padding: 20px;
+        flex: 1;
+        border-radius: 5px;
+      }
+      h1, h2 {
+        font-family: Waltograph;
+        color: #88a6ca;
+      }
+      p {
+        line-height: 1.4;
+        font-family: Verdana;
+      }
+      #map {
+        height: 80%;
+      }
+    </style>
+  </head>
+  <body>
+    <section>
+      <h1>Magic Kingdom Wait Times</h1>
+      <h2>July 6, 2016</h2>
+      <div id="map"></div>
+    </section>
+
+    <script type="text/javascript" charset="utf-8">
+      var map;
+      function initMap(){
+        map = new google.maps.Map(document.querySelector("#map"), {
+          center: { lat: 28.419, lng: -81.582 },
+          scrollwheel: false,
+          zoom: 17
+        });
+      }
+      var url = "http://192.168.0.50.xip.io:8080";
+      function convertToJson(response) {
+        return response.json();
+      }
+      function placeMarkers(data){
+        data.forEach(function(ride){
+          if(!ride.lat){
+            return
+          }
+          var pos = { lat: ride.lat, lng: ride.lon };
+          var color;
+          var markerTitle = ride.name
+          if(ride.status != "Operating") {
+            color = "7a8899";
+            markerTitle += " (Closed)";
+          } else if(ride.waitTime > 60) {
+            color = "ff0000";
+          } else if(ride.waitTime> 50) {
+            color = "ff3300";
+          } else if(ride.waitTime > 40) {
+            color = "ffcc00";
+          } else if(ride.waitTime > 30) {
+            color = "ffff00";
+          } else if(ride.waitTime > 20) {
+            color = "eeff00";
+          } else if(ride.waitTime > 10) {
+            color = "ccff00";
+          } else if(ride.waitTime > 5) {
+            color = "aaff00";
+          } else {
+            color = "00ff00";
+          }
+          if(markerTitle == ride.name){
+            markerTitle += " (Wait time: " + ride.waitTime + " min)";
+          }
+          var marker = new google.maps.Marker({
+            position: pos,
+            map: map,
+            title: markerTitle,
+            icon: "http://www.googlemapsmarkers.com/v1/" + color
+          })
+        })
+      }
+      fetch(url).then(convertToJson).then(placeMarkers);
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBdyKuXFE3ThWoAXsBcAnITyzbIllijU4c&callback=initMap"
+    async defer></script>
+  </body>
+</html>
+
