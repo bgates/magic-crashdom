@@ -73,9 +73,28 @@
             return
           }
           var pos = { lat: ride.lat, lng: ride.lon };
+          var color;
           var markerTitle = ride.name
+          // let's add a color to the marker based on the ride's wait time
           if(ride.status != "Operating") {
+            color = "7a8899";
             markerTitle += " (Closed)";
+          } else if(ride.waitTime > 60) {
+            color = "ff0000";
+          } else if(ride.waitTime> 50) {
+            color = "ff3300";
+          } else if(ride.waitTime > 40) {
+            color = "ffcc00";
+          } else if(ride.waitTime > 30) {
+            color = "ffff00";
+          } else if(ride.waitTime > 20) {
+            color = "eeff00";
+          } else if(ride.waitTime > 10) {
+            color = "ccff00";
+          } else if(ride.waitTime > 5) {
+            color = "aaff00";
+          } else {
+            color = "00ff00";
           }
           if(markerTitle == ride.name){
             markerTitle += " (Wait time: " + ride.waitTime + " min)";
@@ -83,7 +102,8 @@
           var marker = new google.maps.Marker({
             position: pos,
             map: map,
-            title: markerTitle
+            title: markerTitle,
+            icon: "http://www.googlemapsmarkers.com/v1/" + color
           })
         })
       }
