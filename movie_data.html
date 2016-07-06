@@ -42,16 +42,23 @@
       <pre></pre>
     </section>
     <script type="text/javascript" charset="utf-8">
+      // the url is the location of a server that has movie data
       var url = "http://www.omdbapi.com/?t=brotherhood+of+the+wolf&y=&plot=full&r=json";
+
+      // the response that comes back from the server has to be converted into
+      // JavaScript Object Notation (JSON), and the function below does that
       function convertToJson(response) {
         return response.json();
       }
+      // once the data is converted to JSON, the following function takes the
+      // data and uses it to update the page
       function updatePage(data){
         document.querySelector("h1").innerText = data["Title"];
         document.querySelector("h2").innerText = data["Released"];
         document.querySelector("p").innerText = data["Plot"];
         //document.querySelector("pre").innerText = JSON.stringify(data);
       }
+      //this is the line that kicks everything off
       fetch(url).then(convertToJson).then(updatePage);
     </script>
   </body>

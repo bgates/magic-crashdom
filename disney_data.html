@@ -42,13 +42,20 @@
     </section>
 
     <script type="text/javascript" charset="utf-8">
+      // the url is the location of a server that has Disney ride data
       var url = "http://192.168.0.50.xip.io:8080";
+
+      // the response that comes back from the server has to be converted into
+      // JavaScript Object Notation (JSON), and the function below does that
       function convertToJson(response) {
         return response.json();
       }
+      // once the data is converted to JSON, the following function takes the
+      // data and uses it to update the page
       function updatePage(data){
         document.querySelector("pre").innerText = JSON.stringify(data);
       }
+      //this is the line that kicks everything off
       fetch(url).then(convertToJson).then(updatePage);
     </script>
   </body>
